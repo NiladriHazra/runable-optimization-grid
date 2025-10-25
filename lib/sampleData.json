@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "title": "Pitch Deck",
+    "category": "Design",
+    "image": "/image.png",
+    "height": 240,
+    "blurHash": "L6PZfSjE.AyE_3t7t7R**0o#DgR4"
+  },
+  {
+    "id": 2,
+    "title": "Website Migration",
+    "category": "Website",
+    "image": "/image copy 2.png",
+    "height": 300,
+    "blurHash": "LGQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 3,
+    "title": "Fitness Journey",
+    "category": "Video",
+    "image": "/image copy 3.png",
+    "height": 380,
+    "blurHash": "LIQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 4,
+    "title": "Business Pitch",
+    "category": "Document",
+    "image": "/image copy 4.png",
+    "height": 240,
+    "blurHash": "L03cJ~D%009F00IU-;WB~q%M-;WB"
+  },
+  {
+    "id": 5,
+    "title": "Music Performance",
+    "category": "Design",
+    "image": "/image copy.png",
+    "height": 480,
+    "blurHash": "LNQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 6,
+    "title": "Pitch Deck 2",
+    "category": "Video",
+    "image": "/image.png",
+    "height": 240,
+    "blurHash": "L6PZfSjE.AyE_3t7t7R**0o#DgR4"
+  },
+  {
+    "id": 7,
+    "title": "Workflow Design",
+    "category": "Branding",
+    "image": "/image copy 2.png",
+    "height": 300,
+    "blurHash": "LGQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 8,
+    "title": "Action Shot",
+    "category": "Design",
+    "image": "/image copy 3.png",
+    "height": 380,
+    "blurHash": "LIQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 9,
+    "title": "Business Opportunity",
+    "category": "Presentation",
+    "image": "/image copy 4.png",
+    "height": 240,
+    "blurHash": "L03cJ~D%009F00IU-;WB~q%M-;WB"
+  },
+  {
+    "id": 10,
+    "title": "Creative Portfolio",
+    "category": "Website",
+    "image": "/image copy.png",
+    "height": 480,
+    "blurHash": "LNQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 11,
+    "title": "Brand Identity",
+    "category": "Branding",
+    "image": "/image.png",
+    "height": 240,
+    "blurHash": "L6PZfSjE.AyE_3t7t7R**0o#DgR4"
+  },
+  {
+    "id": 12,
+    "title": "Product Launch",
+    "category": "Marketing",
+    "image": "/image copy 2.png",
+    "height": 300,
+    "blurHash": "LGQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 13,
+    "title": "Design System",
+    "category": "Design",
+    "image": "/image copy 3.png",
+    "height": 380,
+    "blurHash": "LIQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 14,
+    "title": "Mobile App",
+    "category": "Development",
+    "image": "/image copy 4.png",
+    "height": 240,
+    "blurHash": "L03cJ~D%009F00IU-;WB~q%M-;WB"
+  },
+  {
+    "id": 15,
+    "title": "E-commerce Platform",
+    "category": "Website",
+    "image": "/image copy.png",
+    "height": 480,
+    "blurHash": "LNQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 16,
+    "title": "Dashboard UI",
+    "category": "Design",
+    "image": "/image.png",
+    "height": 240,
+    "blurHash": "L6PZfSjE.AyE_3t7t7R**0o#DgR4"
+  },
+  {
+    "id": 17,
+    "title": "Marketing Campaign",
+    "category": "Marketing",
+    "image": "/image copy 2.png",
+    "height": 300,
+    "blurHash": "LGQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 18,
+    "title": "Social Media Kit",
+    "category": "Design",
+    "image": "/image copy 3.png",
+    "height": 380,
+    "blurHash": "LIQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  },
+  {
+    "id": 19,
+    "title": "Video Production",
+    "category": "Video",
+    "image": "/image copy 4.png",
+    "height": 240,
+    "blurHash": "L03cJ~D%009F00IU-;WB~q%M-;WB"
+  },
+  {
+    "id": 20,
+    "title": "Annual Report",
+    "category": "Document",
+    "image": "/image copy.png",
+    "height": 480,
+    "blurHash": "LNQ0fW~q_3IU%Mt7t7xu~qM{M{xu"
+  }
+]
