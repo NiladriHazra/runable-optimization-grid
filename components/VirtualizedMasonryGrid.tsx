@@ -17,8 +17,12 @@ interface VirtualizedMasonryGridProps {
 }
 
 const GAP = 20;
-const BUFFER = 1200; // px buffer above/below viewport (increased for fast scrolling)
-const SCROLL_THROTTLE = 8; // ~120fps for ultra-smooth scrolling
+
+// Detect mobile for optimized settings
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const BUFFER = isMobile ? 1500 : 1200; // Balanced buffer - not excessive
+const SCROLL_THROTTLE = 0; // Zero throttle for instant response
+const MIN_VISIBLE_ITEMS = isMobile ? 50 : 80; // Reasonable minimum
 
 /**
  * Virtualized Masonry Grid with custom windowing
@@ -36,12 +40,12 @@ export default function VirtualizedMasonryGrid({
 }: VirtualizedMasonryGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(1200);
-  const [scrollTop, setScrollTop] = useState(0);
+  const scrollTopRef = useRef(0); // Use ref instead of state for sync access
+  const [, forceUpdate] = useState({}); // Force re-render when needed
   const [viewportHeight, setViewportHeight] = useState(800);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const lastScrollTime = useRef(0);
-  const scrollRAF = useRef<number | null>(null);
+  const renderRAF = useRef<number | null>(null);
 
   // Update container width and viewport height
   useEffect(() => {
@@ -90,18 +94,22 @@ export default function VirtualizedMasonryGrid({
     return map;
   }, [items]);
 
-  // Optimized visible range calculation with binary search approach
-  const visibleRange = useMemo(() => {
-    const scrollStart = scrollTop - BUFFER;
-    const scrollEnd = scrollTop + viewportHeight + BUFFER;
+  // Calculate visible range synchronously using ref
+  const getVisibleRange = useCallback(() => {
+    const scrollStart = scrollTopRef.current - BUFFER;
+    const scrollEnd = scrollTopRef.current + viewportHeight + BUFFER;
     return { start: scrollStart, end: scrollEnd };
-  }, [scrollTop, viewportHeight]);
+  }, [viewportHeight]);
 
-  // Filter visible items based on scroll position - optimized
-  const visibleItems = useMemo(() => {
-    const { start: scrollStart, end: scrollEnd } = visibleRange;
+  // Calculate visible items synchronously - called on every render
+  const getVisibleItems = useCallback((): GridItem[] => {
+    const { start: scrollStart, end: scrollEnd } = getVisibleRange();
     
-    // Fast path: use Array indices for better performance
+    // Balanced overscan - not excessive
+    const overscan = BUFFER * 0.5; // 50% extra buffer
+    const extendedStart = scrollStart - overscan;
+    const extendedEnd = scrollEnd + overscan;
+    
     const visible: GridItem[] = [];
     const len = items.length;
     
@@ -112,49 +120,43 @@ export default function VirtualizedMasonryGrid({
       const itemTop = pos.y;
       const itemBottom = pos.y + pos.height;
       
-      // Early exit if we've passed the visible range
-      if (itemTop > scrollEnd) break;
-      
-      // Skip if before visible range
-      if (itemBottom < scrollStart) continue;
+      // Extended range check
+      if (itemTop > extendedEnd) break;
+      if (itemBottom < extendedStart) continue;
       
       visible.push(items[i]);
     }
 
-    // Always render at least 50 items to prevent blank screens during fast scrolling
-    if (visible.length < 50 && items.length >= 50) {
-      const startIndex = Math.max(0, Math.floor((scrollTop / totalHeight) * items.length) - 25);
-      return items.slice(startIndex, startIndex + 50);
+    // AGGRESSIVE FALLBACK: Always guarantee content
+    if (visible.length < MIN_VISIBLE_ITEMS && items.length >= MIN_VISIBLE_ITEMS) {
+      const scrollPercent = totalHeight > 0 ? scrollTopRef.current / totalHeight : 0;
+      const estimatedIndex = Math.floor(scrollPercent * items.length);
+      const startIndex = Math.max(0, estimatedIndex - Math.floor(MIN_VISIBLE_ITEMS * 0.5));
+      const endIndex = Math.min(items.length, startIndex + MIN_VISIBLE_ITEMS);
+      return items.slice(startIndex, endIndex);
     }
 
     return visible;
-  }, [items, positions, visibleRange, scrollTop, totalHeight]);
+  }, [items, positions, getVisibleRange, totalHeight]);
 
-  // Optimized scroll handler with throttling and RAF
+  // Synchronous scroll handler - updates ref and forces re-render
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
-    const now = Date.now();
     
-    // Throttle scroll updates to ~60fps
-    if (now - lastScrollTime.current < SCROLL_THROTTLE) {
-      // Cancel previous RAF if it exists
-      if (scrollRAF.current) {
-        cancelAnimationFrame(scrollRAF.current);
-      }
-      
-      // Schedule update for next frame
-      scrollRAF.current = requestAnimationFrame(() => {
-        setScrollTop(target.scrollTop);
-        lastScrollTime.current = now;
-      });
-      return;
+    // Update ref immediately (synchronous)
+    scrollTopRef.current = target.scrollTop;
+    
+    // Cancel any pending RAF
+    if (renderRAF.current) {
+      cancelAnimationFrame(renderRAF.current);
     }
     
-    // Immediate update for smooth experience
-    setScrollTop(target.scrollTop);
-    lastScrollTime.current = now;
+    // Force re-render on next frame
+    renderRAF.current = requestAnimationFrame(() => {
+      forceUpdate({});
+    });
 
-    // Use transition for infinite scroll (non-urgent)
+    // Infinite scroll check
     if (
       hasMore &&
       onLoadMore &&
@@ -169,34 +171,28 @@ export default function VirtualizedMasonryGrid({
     }
   }, [hasMore, onLoadMore, isLoadingMore, totalHeight, startTransition]);
 
-  // Setup passive scroll listener for better performance
+  // Cleanup RAF on unmount
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Add passive listener for better scroll performance
-    const options = { passive: true };
-    container.addEventListener('scroll', handleScroll as any, options);
-
     return () => {
-      container.removeEventListener('scroll', handleScroll as any);
-      if (scrollRAF.current) {
-        cancelAnimationFrame(scrollRAF.current);
+      if (renderRAF.current) {
+        cancelAnimationFrame(renderRAF.current);
       }
     };
-  }, [handleScroll]);
+  }, []);
 
   return (
     <div
       ref={containerRef}
       className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth"
+      onScroll={handleScroll}
       style={{
         height: viewportHeight,
         willChange: 'scroll-position',
         WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
+        scrollBehavior: 'auto', // Remove smooth for instant response
         transform: 'translateZ(0)', // Force GPU acceleration
         backfaceVisibility: 'hidden',
+        background: '#0a0a0a', // Dark background matches theme
       }}
     >
       {/* Container with explicit height */}
@@ -208,8 +204,8 @@ export default function VirtualizedMasonryGrid({
           willChange: 'contents',
         }}
       >
-        {/* Render only visible items - optimized with Map lookup */}
-        {visibleItems.map((item) => {
+        {/* Render visible items - calculated synchronously on every render */}
+        {getVisibleItems().map((item: GridItem) => {
           const index = itemIndexMap.get(item.id);
           if (index === undefined) return null;
           

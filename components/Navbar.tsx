@@ -7,8 +7,6 @@ const navItems = [
   { id: 'slides', label: 'AI Slides' },
   { id: 'website', label: 'AI Website' },
   { id: 'report', label: 'AI Report' },
-  { id: 'document', label: 'AI Document' },
-  { id: 'spreadsheet', label: 'AI Spreadsheet' },
 ];
 
 /**
@@ -42,14 +40,14 @@ export default function Navbar() {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none" />
       )}
       
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center gap-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center gap-4 sm:gap-8 py-3 sm:py-4 overflow-x-auto scrollbar-hide touch-pan-x">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleTabChange(item.id)}
               disabled={isTransitioning}
-              className="relative pb-1 text-sm font-medium transition-all duration-300 group disabled:opacity-50"
+              className="relative pb-1 text-xs sm:text-sm font-medium transition-all duration-300 group disabled:opacity-50 whitespace-nowrap flex-shrink-0 touch-manipulation"
             >
               {/* Text */}
               <span

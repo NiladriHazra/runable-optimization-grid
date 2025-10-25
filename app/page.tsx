@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
 import VirtualizedMasonryGrid from '@/components/VirtualizedMasonryGrid';
 import Navbar from '@/components/Navbar';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import LoadingState from '@/components/LoadingState';
 import { generateSampleData, generateDataChunk } from '@/lib/generateData';
 
 const INITIAL_LOAD = 500; // Start with 500 items
@@ -28,49 +30,51 @@ export default function Home() {
   }, [items.length]);
 
   return (
-    <div className="min-h-screen w-full bg-black relative overflow-hidden">
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          background: `
-            linear-gradient(
-              90deg, 
-              transparent 0%,
-              transparent 30%,
-              rgba(138, 43, 226, 0.4) 50%,
-              transparent 70%,
-              transparent 100%
-            ),
-            linear-gradient(
-              to bottom,
-              #1a1a2e 0%,
-              #2d1b69 50%,
-              #0f0f23 100%
-            )
-          `,
-          backgroundImage: `
-            repeating-linear-gradient(
-              90deg,
-              transparent 0px,
-              transparent 79px,
-              rgba(255, 255, 255, 0.05) 80px,
-              rgba(255, 255, 255, 0.05) 81px
-            )
-          `,
-        }}
-      />
-      
-      {/* Navbar */}
-      <Navbar />
-      
-      {/* Main Content */}
-      <main className="relative z-10 max-w-7xl mx-auto px-6 py-8">
-        <VirtualizedMasonryGrid
-          items={items}
-          onLoadMore={handleLoadMore}
-          hasMore={hasMore}
+    <ErrorBoundary>
+      <div className="min-h-screen w-full bg-black relative overflow-hidden">
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            background: `
+              linear-gradient(
+                90deg, 
+                transparent 0%,
+                transparent 30%,
+                rgba(138, 43, 226, 0.4) 50%,
+                transparent 70%,
+                transparent 100%
+              ),
+              linear-gradient(
+                to bottom,
+                #1a1a2e 0%,
+                #2d1b69 50%,
+                #0f0f23 100%
+              )
+            `,
+            backgroundImage: `
+              repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 79px,
+                rgba(255, 255, 255, 0.05) 80px,
+                rgba(255, 255, 255, 0.05) 81px
+              )
+            `,
+          }}
         />
-      </main>
-    </div>
+        
+        {/* Navbar */}
+        <Navbar />
+        
+        {/* Main Content */}
+        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+          <VirtualizedMasonryGrid
+            items={items}
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+          />
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }

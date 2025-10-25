@@ -59,15 +59,15 @@ export default function PreviewModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Title and Close Button */}
-        <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-6 bg-gradient-to-b from-black/80 to-transparent">
-          <h2 className="text-white text-xl font-semibold">{title}</h2>
+        <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 sm:p-6 bg-gradient-to-b from-black/90 to-transparent">
+          <h2 className="text-white text-sm sm:text-xl font-semibold truncate pr-2">{title}</h2>
           
           <button
             onClick={onClose}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all duration-200 hover:scale-110"
+            className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md transition-all duration-200 hover:scale-110 active:scale-95 touch-manipulation flex-shrink-0"
             aria-label="Close preview"
           >
-            <X className="w-5 h-5 text-white" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
         </div>
 

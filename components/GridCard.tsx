@@ -91,22 +91,23 @@ function GridCard({ item, width, height, x, y }: GridCardProps) {
           }`}
         >
           {/* Title */}
-          <h3 className="text-white font-semibold text-lg mb-4">{item.title}</h3>
+          <h3 className="text-white font-semibold text-sm sm:text-lg mb-3 sm:mb-4">{item.title}</h3>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <button
               onClick={handlePreview}
-              className="flex items-center gap-2 px-6 py-2.5 bg-black/80 hover:bg-black text-white rounded-full text-sm font-medium transition-all hover:scale-105 backdrop-blur-sm"
+              className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-black/80 hover:bg-black active:bg-black text-white rounded-full text-xs sm:text-sm font-medium transition-all hover:scale-105 active:scale-95 backdrop-blur-sm touch-manipulation"
             >
-              <Eye className="w-4 h-4" />
-              Preview
+              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Preview</span>
+              <span className="sm:hidden">View</span>
             </button>
             <button
               onClick={handleRemix}
-              className="flex items-center gap-2 px-6 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-black rounded-full text-sm font-semibold transition-all hover:scale-105"
+              className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-cyan-400 hover:bg-cyan-300 active:bg-cyan-500 text-black rounded-full text-xs sm:text-sm font-semibold transition-all hover:scale-105 active:scale-95 touch-manipulation"
             >
-              <Wand2 className="w-4 h-4" />
+              <Wand2 className="w-3 h-3 sm:w-4 sm:h-4" />
               Remix
             </button>
           </div>
