@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Eye, Wand2 } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
 import PreviewModal from './PreviewModal';
@@ -21,8 +21,9 @@ interface GridCardProps {
  * - Preview and Remix action buttons
  * - Fullscreen preview modal
  * - Optimized rendering with content-visibility
+ * - React.memo for preventing unnecessary re-renders
  */
-export default function GridCard({ item, width, height, x, y }: GridCardProps) {
+function GridCard({ item, width, height, x, y }: GridCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -119,3 +120,6 @@ export default function GridCard({ item, width, height, x, y }: GridCardProps) {
     </div>
   );
 }
+
+// Export memoized component to prevent unnecessary re-renders
+export default memo(GridCard);

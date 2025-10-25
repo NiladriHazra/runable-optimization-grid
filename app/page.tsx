@@ -1,8 +1,32 @@
-import MasonryGrid from '@/components/MasonryGrid';
+'use client';
+
+import { useState, useCallback } from 'react';
+import VirtualizedMasonryGrid from '@/components/VirtualizedMasonryGrid';
 import Navbar from '@/components/Navbar';
-import sampleData from '@/lib/sampleData.json';
+import { generateSampleData, generateDataChunk } from '@/lib/generateData';
+
+const INITIAL_LOAD = 500; // Start with 500 items
+const LOAD_MORE_COUNT = 200; // Load 200 more each time
+const MAX_ITEMS = 15000; // Maximum 15,000 items
 
 export default function Home() {
+  const [items, setItems] = useState(() => generateSampleData(INITIAL_LOAD));
+  const [hasMore, setHasMore] = useState(true);
+
+  const handleLoadMore = useCallback(() => {
+    if (items.length >= MAX_ITEMS) {
+      setHasMore(false);
+      return;
+    }
+
+    const newItems = generateDataChunk(items.length, LOAD_MORE_COUNT);
+    setItems((prev) => [...prev, ...newItems]);
+
+    if (items.length + newItems.length >= MAX_ITEMS) {
+      setHasMore(false);
+    }
+  }, [items.length]);
+
   return (
     <div className="min-h-screen w-full bg-black relative overflow-hidden">
       <div
@@ -40,8 +64,12 @@ export default function Home() {
       <Navbar />
       
       {/* Main Content */}
-      <main className="relative z-10 max-w-7xl mx-auto px-6 py-8 h-[calc(100vh-65px)]">
-        <MasonryGrid items={sampleData} />
+      <main className="relative z-10 max-w-7xl mx-auto px-6 py-8">
+        <VirtualizedMasonryGrid
+          items={items}
+          onLoadMore={handleLoadMore}
+          hasMore={hasMore}
+        />
       </main>
     </div>
   );

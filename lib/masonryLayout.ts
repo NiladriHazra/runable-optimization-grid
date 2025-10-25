@@ -1,6 +1,6 @@
 import { GridItem, CalculatedPosition } from './types';
 
-interface MasonryConfig {
+export interface MasonryConfig {
   columnWidth: number;
   gap: number;
   columns: number;

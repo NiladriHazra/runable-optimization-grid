@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { BlurhashCanvas } from 'react-blurhash';
 import Image from 'next/image';
 
@@ -19,7 +19,7 @@ interface OptimizedImageProps {
  * - Progressive loading strategy
  * - Next.js Image optimization
  */
-export default function OptimizedImage({
+const OptimizedImage = memo(function OptimizedImage({
   src,
   alt,
   blurHash,
@@ -92,4 +92,6 @@ export default function OptimizedImage({
       )}
     </div>
   );
-}
+});
+
+export default OptimizedImage;
