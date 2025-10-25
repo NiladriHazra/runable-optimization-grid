@@ -48,6 +48,9 @@ function GridCard({ item, width, height, x, y }: GridCardProps) {
         height,
         contentVisibility: 'auto',
         containIntrinsicSize: `auto ${height}px`,
+        transform: 'translateZ(0)', // GPU acceleration
+        backfaceVisibility: 'hidden',
+        perspective: 1000,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

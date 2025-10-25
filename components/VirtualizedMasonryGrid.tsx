@@ -18,7 +18,7 @@ interface VirtualizedMasonryGridProps {
 
 const GAP = 20;
 const BUFFER = 1200; // px buffer above/below viewport (increased for fast scrolling)
-const SCROLL_THROTTLE = 16; // ~60fps throttling
+const SCROLL_THROTTLE = 8; // ~120fps for ultra-smooth scrolling
 
 /**
  * Virtualized Masonry Grid with custom windowing
@@ -169,24 +169,34 @@ export default function VirtualizedMasonryGrid({
     }
   }, [hasMore, onLoadMore, isLoadingMore, totalHeight, startTransition]);
 
-  // Cleanup RAF on unmount
+  // Setup passive scroll listener for better performance
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Add passive listener for better scroll performance
+    const options = { passive: true };
+    container.addEventListener('scroll', handleScroll as any, options);
+
     return () => {
+      container.removeEventListener('scroll', handleScroll as any);
       if (scrollRAF.current) {
         cancelAnimationFrame(scrollRAF.current);
       }
     };
-  }, []);
+  }, [handleScroll]);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-full overflow-y-auto overflow-x-hidden"
-      onScroll={handleScroll}
+      className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth"
       style={{
         height: viewportHeight,
         willChange: 'scroll-position',
-        WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+        WebkitOverflowScrolling: 'touch',
+        scrollBehavior: 'smooth',
+        transform: 'translateZ(0)', // Force GPU acceleration
+        backfaceVisibility: 'hidden',
       }}
     >
       {/* Container with explicit height */}
